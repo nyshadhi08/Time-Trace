@@ -1,0 +1,642 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>TimeTrace - Sign Up</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Inter, Arial, sans-serif;
+        }
+
+
+        body {
+            min-height: 100vh;
+
+            background: #f5f7fb;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: #0c1d42;
+        }
+
+
+        .page {
+            width: 100%;
+            max-width: 1100px;
+
+            min-height: 650px;
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            background: white;
+
+            border-radius: 28px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 20px 60px
+                rgba(20,30,60,0.12);
+        }
+
+
+        /* ==========================================
+           LEFT SIDE
+        ========================================== */
+
+        .welcome {
+            background:
+                linear-gradient(
+                    145deg,
+                    #323a5e,
+                    #252d57
+                );
+
+            color: white;
+
+            padding: 60px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+        }
+
+
+        .logo {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin-bottom: 70px;
+        }
+
+
+        .logo-icon {
+            width: 46px;
+            height: 46px;
+
+            border-radius: 14px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: white;
+
+            color: #5865f2;
+
+            font-size: 22px;
+
+            font-weight: 800;
+        }
+
+
+        .logo span {
+            font-size: 25px;
+
+            font-weight: 750;
+        }
+
+
+        .welcome h1 {
+            font-size: 42px;
+
+            line-height: 1.15;
+
+            margin-bottom: 20px;
+        }
+
+
+        .welcome p {
+            color: #c9cde0;
+
+            font-size: 16px;
+
+            line-height: 1.7;
+
+            max-width: 430px;
+        }
+
+
+        .features {
+            margin-top: 40px;
+        }
+
+
+        .feature {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin: 17px 0;
+
+            color: #e4e6f1;
+        }
+
+
+        .feature-icon {
+            width: 32px;
+            height: 32px;
+
+            border-radius: 9px;
+
+            background:
+                rgba(255,255,255,0.1);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+        }
+
+
+        /* ==========================================
+           SIGNUP AREA
+        ========================================== */
+
+        .signup-area {
+            padding: 50px 60px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+        }
+
+
+        .signup-area h2 {
+            font-size: 32px;
+
+            color: #16213f;
+
+            margin-bottom: 10px;
+        }
+
+
+        .subtitle {
+            color: #7d8497;
+
+            margin-bottom: 30px;
+
+            font-size: 15px;
+
+            line-height: 1.5;
+        }
+
+
+        /* ==========================================
+           FORM
+        ========================================== */
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+
+        label {
+            display: block;
+
+            font-size: 14px;
+
+            font-weight: 650;
+
+            color: #16213f;
+
+            margin-bottom: 8px;
+        }
+
+
+        input {
+            width: 100%;
+
+            padding: 14px 16px;
+
+            border:
+                1px solid
+                #e0e3eb;
+
+            border-radius: 12px;
+
+            outline: none;
+
+            font-size: 15px;
+
+            color: #16213f;
+
+            background: white;
+
+            transition: 0.2s;
+        }
+
+
+        input::placeholder {
+            color: #a1a7b8;
+        }
+
+
+        input:focus {
+            border-color: #5865f2;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(88,101,242,0.1);
+        }
+
+
+        /* ==========================================
+           SIGNUP BUTTON
+        ========================================== */
+
+        .signup-btn {
+            width: 100%;
+
+            border: none;
+
+            padding: 15px;
+
+            border-radius: 12px;
+
+            background: #5865f2;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+            margin-top: 8px;
+        }
+
+
+        .signup-btn:hover {
+            background: #4752d8;
+
+            transform:
+                translateY(-1px);
+
+            box-shadow:
+                0 8px 20px
+                rgba(88,101,242,0.25);
+        }
+
+
+        /* ==========================================
+           ERROR
+        ========================================== */
+
+        .error {
+            background: #fff0f0;
+
+            color: #d93636;
+
+            padding: 12px 14px;
+
+            border-radius: 10px;
+
+            margin-bottom: 18px;
+
+            font-size: 14px;
+
+            border:
+                1px solid
+                #ffd5d5;
+        }
+
+
+        /* ==========================================
+           LOGIN LINK
+        ========================================== */
+
+        .login-text {
+            text-align: center;
+
+            margin-top: 22px;
+
+            color: #7d8497;
+
+            font-size: 14px;
+        }
+
+
+        .login-text a {
+            color: #5865f2;
+
+            font-weight: 700;
+
+            text-decoration: none;
+        }
+
+
+        .login-text a:hover {
+            color: #4752d8;
+
+            text-decoration: underline;
+        }
+
+
+        /* ==========================================
+           RESPONSIVE
+        ========================================== */
+
+        @media (max-width: 800px) {
+
+            .page {
+                grid-template-columns: 1fr;
+
+                margin: 20px;
+
+                min-height: auto;
+            }
+
+
+            .welcome {
+                display: none;
+            }
+
+
+            .signup-area {
+                padding: 40px 30px;
+            }
+        }
+
+
+        @media (max-width: 450px) {
+
+            .page {
+                margin: 12px;
+
+                border-radius: 20px;
+            }
+
+
+            .signup-area {
+                padding: 35px 22px;
+            }
+
+
+            .signup-area h2 {
+                font-size: 27px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="page">
+
+
+    <!-- ==========================================
+         LEFT SIDE
+    ========================================== -->
+
+    <div class="welcome">
+
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                ⏱
+            </div>
+
+            <span>
+                TimeTrace
+            </span>
+
+        </div>
+
+
+        <h1>
+            Plan smarter.<br>
+            Achieve more.
+        </h1>
+
+
+        <p>
+            Your intelligent personal productivity workspace
+            that helps you organize tasks, goals, schedules
+            and daily progress in one place.
+        </p>
+
+
+        <div class="features">
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    ✓
+                </div>
+
+                Smart task planning
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    ◷
+                </div>
+
+                Automatic scheduling
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    ◆
+                </div>
+
+                Goals & productivity analytics
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    ✦
+                </div>
+
+                AI productivity assistant
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- ==========================================
+         RIGHT SIDE
+    ========================================== -->
+
+    <div class="signup-area">
+
+
+        <h2>
+            Create your account ✨
+        </h2>
+
+
+        <p class="subtitle">
+            Sign up to start organizing your tasks,
+            schedules and goals with TimeTrace.
+        </p>
+
+
+        {% if error %}
+
+        <div class="error">
+            {{ error }}
+        </div>
+
+        {% endif %}
+
+
+        <form
+            method="POST"
+            action="{{ url_for('signup') }}"
+        >
+
+
+            <div class="form-group">
+
+                <label for="name">
+                    Name
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Enter your name"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email address
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Create a password"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="confirm_password">
+                    Confirm password
+                </label>
+
+                <input
+                    type="password"
+                    id="confirm_password"
+                    name="confirm_password"
+                    placeholder="Confirm your password"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="signup-btn"
+            >
+                Create TimeTrace Account
+            </button>
+
+
+        </form>
+
+
+        <div class="login-text">
+
+            Already have an account?
+
+            <a href="{{ url_for('login') }}">
+                Login here
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>
+

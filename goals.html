@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Goals - TimeTrace</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+<aside class="sidebar">
+
+<div class="brand">
+
+<div class="brand-icon"></div>
+
+<span>TimeTrace</span>
+
+</div>
+
+
+<div class="workspace-title">
+WORKSPACE
+</div>
+
+
+<nav class="navigation">
+
+<a href="{{ url_for('dashboard') }}"
+class="nav-item">
+
+<span>🏠</span>
+<span>Today</span>
+
+</a>
+
+
+<a href="{{ url_for('goals_page') }}"
+class="nav-item active">
+
+<span>🎯</span>
+<span>Goals</span>
+
+</a>
+
+
+<a href="{{ url_for('planner') }}"
+class="nav-item">
+
+<span>📅</span>
+<span>Planner</span>
+
+</a>
+
+
+<a href="{{ url_for('tasks_page') }}"
+class="nav-item">
+
+<span>✓</span>
+<span>Tasks</span>
+
+</a>
+
+</nav>
+
+
+<div class="workspace-title insights-title">
+INSIGHTS
+</div>
+
+
+<nav class="navigation">
+
+<a href="{{ url_for('productivity_dna') }}"
+class="nav-item">
+
+<span>🧬</span>
+<span>My Productivity DNA</span>
+
+</a>
+
+
+<a href="{{ url_for('analytics') }}"
+class="nav-item">
+
+<span>📊</span>
+<span>Analytics</span>
+
+</a>
+
+</nav>
+
+</aside>
+
+
+<main class="main">
+
+
+<div class="page-header">
+
+<div>
+
+<div class="eyebrow">
+YOUR GOALS
+</div>
+
+<h1>
+🎯 Goals
+</h1>
+
+<p>
+Track the goals that matter to you.
+</p>
+
+</div>
+
+</div>
+
+
+<section class="content-card">
+
+<div class="section-heading">
+
+<div>
+
+<span class="eyebrow">
+NEW GOAL
+</span>
+
+<h2>
+Add a Long-Term Goal
+</h2>
+
+</div>
+
+</div>
+
+<form id="addGoalForm" class="goal-form" onsubmit="return submitGoal(event)">
+
+<div class="form-group">
+<label for="goalTitle">Title</label>
+<input type="text" id="goalTitle" name="title" placeholder="e.g. Finish DBMS course" required>
+</div>
+
+<div class="form-group">
+<label for="goalDescription">Description (optional)</label>
+<input type="text" id="goalDescription" name="description" placeholder="A short note about this goal">
+</div>
+
+<div class="form-group">
+<label for="goalCategory">Category</label>
+<select id="goalCategory" name="category">
+<option value="General">General</option>
+<option value="Study">Study</option>
+<option value="Work">Work</option>
+<option value="College">College</option>
+<option value="Personal">Personal</option>
+</select>
+</div>
+
+<div class="form-group">
+<label for="goalPriority">Priority</label>
+<select id="goalPriority" name="priority">
+<option value="Low">Low</option>
+<option value="Medium" selected>Medium</option>
+<option value="High">High</option>
+</select>
+</div>
+
+<div class="form-group">
+<label for="goalDeadline">Target date (optional)</label>
+<input type="date" id="goalDeadline" name="deadline">
+</div>
+
+<button type="submit" class="goal-submit-btn">🎯 Add Goal</button>
+
+<div id="goalFormMessage"></div>
+
+</form>
+
+</section>
+
+
+<section class="content-card">
+
+<div class="section-heading">
+
+<div>
+
+<span class="eyebrow">
+MY GOALS
+</span>
+
+<h2>
+Current Goals
+</h2>
+
+</div>
+
+</div>
+
+
+{% if goals %}
+
+<div class="goal-grid">
+
+{% for goal in goals %}
+
+<div class="goal-card">
+
+<div class="goal-header">
+
+<h3>
+{{ goal['title'] }}
+</h3>
+
+<span>
+{{ goal['priority'] }}
+</span>
+
+</div>
+
+
+{% if goal['description'] %}
+
+<p>
+{{ goal['description'] }}
+</p>
+
+{% endif %}
+
+
+<div class="goal-progress">
+
+<div class="goal-progress-label">
+
+<span>
+Progress
+</span>
+
+<strong>
+{{ goal['progress']|default(0) }}%
+</strong>
+
+</div>
+
+
+<div class="progress-bar">
+
+<div
+class="progress-fill"
+style="width: {{ goal['progress']|default(0) }}%;">
+
+</div>
+
+</div>
+
+</div>
+
+
+{% if goal['deadline'] %}
+
+<div class="goal-deadline">
+
+📅
+{{ goal['deadline'] }}
+
+</div>
+
+{% endif %}
+
+
+<div class="goal-controls">
+
+<input
+type="range"
+min="0"
+max="100"
+value="{{ goal['progress']|default(0) }}"
+onchange="updateGoal(
+{{ goal['id'] }},
+this.value
+)">
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% else %}
+
+<div class="empty-state">
+
+🎯
+
+<h3>
+No goals yet
+</h3>
+
+<p>
+Create a goal from your dashboard.
+</p>
+
+</div>
+
+{% endif %}
+
+</section>
+
+
+</main>
+
+</div>
+
+
+<script>
+
+async function submitGoal(event) {
+
+    event.preventDefault();
+
+    const form = document.getElementById("addGoalForm");
+    const messageBox = document.getElementById("goalFormMessage");
+
+    const payload = {
+        title: document.getElementById("goalTitle").value.trim(),
+        description: document.getElementById("goalDescription").value.trim(),
+        category: document.getElementById("goalCategory").value,
+        priority: document.getElementById("goalPriority").value,
+        deadline: document.getElementById("goalDeadline").value
+    };
+
+    if (!payload.title) {
+        messageBox.textContent = "Please enter a goal title.";
+        messageBox.className = "goal-form-error";
+        return false;
+    }
+
+    try {
+        const response = await fetch("/create-goal", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            messageBox.textContent = data.message || "Goal added.";
+            messageBox.className = "goal-form-success";
+            speakGoal("Goal added: " + payload.title);
+            form.reset();
+            setTimeout(function () {
+                location.reload();
+            }, 1200);
+        } else {
+            messageBox.textContent = data.message || "Could not add goal.";
+            messageBox.className = "goal-form-error";
+            speakGoal(data.message || "Could not add the goal.");
+        }
+    } catch (error) {
+        console.error(error);
+        messageBox.textContent = "Could not connect to the server.";
+        messageBox.className = "goal-form-error";
+        speakGoal("Could not connect to the server.");
+    }
+
+    return false;
+}
+
+// Voice output for goal actions - goals.html had none before
+function speakGoal(text) {
+    if (!text || !("speechSynthesis" in window)) return;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 1;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
+}
+
+async function updateGoal(
+    id,
+    progress
+) {
+
+const response =
+await fetch(
+"/goal/" + id + "/progress",
+{
+method: "POST",
+
+headers: {
+"Content-Type":
+"application/json"
+},
+
+body: JSON.stringify({
+progress: progress
+})
+
+}
+);
+
+const data =
+await response.json();
+
+if (data.success) {
+
+location.reload();
+
+}
+
+}
+
+</script>
+
+
+</body>
+
+</html>

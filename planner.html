@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Planner - TimeTrace</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                ✦
+            </div>
+
+            <span>
+                TimeTrace
+            </span>
+
+        </div>
+
+
+        <div class="workspace-title">
+            WORKSPACE
+        </div>
+
+
+        <nav class="navigation">
+
+            <a href="{{ url_for('dashboard') }}"
+               class="nav-item">
+
+                <span>🏠</span>
+                <span>Today</span>
+
+            </a>
+
+
+            <a href="{{ url_for('goals_page') }}"
+               class="nav-item">
+
+                <span>🎯</span>
+                <span>Goals</span>
+
+            </a>
+
+
+            <a href="{{ url_for('planner') }}"
+               class="nav-item active">
+
+                <span>📅</span>
+                <span>Planner</span>
+
+            </a>
+
+
+            <a href="{{ url_for('tasks_page') }}"
+               class="nav-item">
+
+                <span>✓</span>
+                <span>Tasks</span>
+
+            </a>
+
+        </nav>
+
+
+        <div class="workspace-title insights-title">
+            INSIGHTS
+        </div>
+
+
+        <nav class="navigation">
+
+            <a href="{{ url_for('productivity_dna') }}"
+               class="nav-item">
+
+                <span>🧬</span>
+                <span>My Productivity DNA</span>
+
+            </a>
+
+
+            <a href="{{ url_for('analytics') }}"
+               class="nav-item">
+
+                <span>📊</span>
+                <span>Analytics</span>
+
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="main">
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <div>
+
+                <div class="eyebrow">
+                    SMART PLANNER
+                </div>
+
+                <h1>
+                    📅 Planner
+                </h1>
+
+                <p>
+                    Organize your tasks, routines and daily schedule.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             TODAY'S SCHEDULE
+        ================================================== -->
+
+        <section class="planner-card">
+
+
+            <div class="planner-section-header">
+
+                <div>
+
+                    <div class="eyebrow">
+                        TASK SCHEDULE
+                    </div>
+
+                    <h2>
+                        {% if is_today %}Today's Plan{% else %}Plan for {{ selected_date_display }}{% endif %}
+                    </h2>
+
+                    <p class="section-description">
+                        Your tasks arranged according to their scheduled time.
+                    </p>
+
+                </div>
+
+
+                <div class="planner-date" style="display: flex; align-items: center; gap: 10px;">
+
+                    <a href="{{ url_for('planner') }}?date={{ prev_date }}"
+                       style="text-decoration: none; font-size: 18px; padding: 4px 8px;">
+                        ‹
+                    </a>
+
+                    <form method="GET" action="{{ url_for('planner') }}" style="display: inline;">
+                        <input type="date" name="date" value="{{ selected_date }}"
+                               onchange="this.form.submit()"
+                               style="border: 1px solid #e0e3eb; border-radius: 8px; padding: 6px 10px; font-size: 14px;">
+                    </form>
+
+                    <a href="{{ url_for('planner') }}?date={{ next_date }}"
+                       style="text-decoration: none; font-size: 18px; padding: 4px 8px;">
+                        ›
+                    </a>
+
+                    {% if not is_today %}
+                    <a href="{{ url_for('planner') }}"
+                       style="font-size: 12px; text-decoration: underline; margin-left: 4px;">
+                        Today
+                    </a>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+
+            {% if tasks %}
+
+
+            <div class="timeline">
+
+
+                {% for task in tasks %}
+
+
+                <div class="timeline-item">
+
+
+                    <!-- TIME -->
+
+                    <div class="timeline-time">
+
+                        {% if task['scheduled_start'] %}
+
+                            <strong>
+                                {{ task['scheduled_start'][11:16] }}
+                            </strong>
+
+                            {% if task['scheduled_end'] %}
+
+                                <span>
+                                    {{ task['scheduled_end'][11:16] }}
+                                </span>
+
+                            {% endif %}
+
+                        {% else %}
+
+                            <strong>
+                                Flexible
+                            </strong>
+
+                        {% endif %}
+
+                    </div>
+
+
+
+                    <!-- TIMELINE LINE -->
+
+                    <div class="timeline-marker">
+
+                        <div class="timeline-dot"></div>
+
+                    </div>
+
+
+
+                    <!-- TASK CARD -->
+
+                    <div class="timeline-content">
+
+
+                        <div class="timeline-content-top">
+
+                            <div>
+
+                                <h3>
+                                    {{ task['title'] }}
+                                </h3>
+
+                                <p>
+                                    {{ task['category'] }}
+                                    {% if task['duration'] %}
+                                    <span>•</span>
+                                    {{ task['duration'] }} minutes
+                                    {% endif %}
+                                </p>
+
+                            </div>
+
+
+                            <span class="status
+                                {% if task['status'] == 'completed' %}
+                                    completed
+                                {% elif task['status'] == 'missed' %}
+                                    missed
+                                {% else %}
+                                    pending
+                                {% endif %}">
+
+                                {% if task['status'] == 'completed' %}
+                                    ✓ Completed
+                                {% elif task['status'] == 'missed' %}
+                                    ! Missed
+                                {% else %}
+                                    • Pending
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- PRIORITY -->
+
+                        <div class="planner-task-footer">
+
+                            {% if task['duration'] %}
+                            <span class="planner-meta">
+
+                                <span class="meta-icon">
+                                    ⏱
+                                </span>
+
+                                {{ task['duration'] }} min
+
+                            </span>
+                            {% endif %}
+
+
+                            <span class="planner-meta">
+
+                                <span class="meta-icon">
+                                    📌
+                                </span>
+
+                                {{ task['priority'] }}
+
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+            {% else %}
+
+
+            <!-- EMPTY PLANNER -->
+
+            <div class="planner-empty">
+
+                <div class="empty-icon">
+                    📅
+                </div>
+
+                <h3>
+                    {% if is_today %}Your planner is empty{% else %}Nothing scheduled for {{ selected_date_display }}{% endif %}
+                </h3>
+
+                <p>
+                    Add tasks from the dashboard and SmartFlow
+                    will schedule them automatically.
+                </p>
+
+                <a href="{{ url_for('dashboard') }}"
+                   class="planner-empty-button">
+
+                    Go to Dashboard →
+
+                </a>
+
+            </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             ROUTINES
+        ================================================== -->
+
+        <section class="planner-card">
+
+
+            <div class="planner-section-header">
+
+                <div>
+
+                    <div class="eyebrow">
+                        ROUTINES
+                    </div>
+
+                    <h2>
+                        Your Routines
+                    </h2>
+
+                    <p class="section-description">
+                        Your fixed routines and regular activities.
+                    </p>
+
+                </div>
+
+
+                <div class="routine-header-icon">
+                    🔁
+                </div>
+
+            </div>
+
+
+
+            {% if routines %}
+
+
+            <div class="routine-grid">
+
+
+                {% for routine in routines %}
+
+
+                <div class="routine-card">
+
+
+                    <div class="routine-card-top">
+
+                        <div class="routine-icon">
+                            🔁
+                        </div>
+
+
+                        <span class="routine-label">
+                            ROUTINE
+                        </span>
+
+                    </div>
+
+
+                    <h3>
+                        {{ routine['title'] }}
+                    </h3>
+
+
+                    <div class="routine-time">
+
+                        <span>
+                            🕐
+                        </span>
+
+                        {{ routine['start_time'] }}
+                        -
+                        {{ routine['end_time'] }}
+
+                    </div>
+
+
+                    <div class="routine-days">
+
+                        📅
+
+                        {{ routine['days'] }}
+
+                    </div>
+
+
+                </div>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+            {% else %}
+
+
+            <div class="planner-empty routine-empty">
+
+                <div class="empty-icon">
+                    🔁
+                </div>
+
+                <h3>
+                    No routines yet
+                </h3>
+
+                <p>
+                    Your fixed routines will appear here.
+                </p>
+
+            </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+</body>
+
+</html>

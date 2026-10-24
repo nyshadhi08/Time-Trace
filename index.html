@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TimeTrace AI | Smart Personalized Planner</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='landing.css') }}">
+</head>
+
+<body>
+
+    <!-- Background Effects -->
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    <div class="grid-background"></div>
+
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+
+        <div class="logo">
+            <div class="logo-icon">
+                <span>⏱</span>
+            </div>
+
+            <div>
+                <h2>TimeTrace</h2>
+                <small>AI SMART PLANNER</small>
+            </div>
+        </div>
+
+
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
+        </nav>
+
+
+        <div class="nav-buttons">
+            <a href="{{ url_for('login') }}"
+               class="login-btn">
+                Login
+            </a>
+
+            <a href="{{ url_for('signup') }}"
+               class="signup-btn">
+                Sign Up
+            </a>
+        </div>
+
+    </header>
+
+
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="home">
+
+        <div class="hero-content">
+
+            <div class="badge">
+                <span class="pulse"></span>
+                AI-POWERED PERSONAL PRODUCTIVITY
+            </div>
+
+
+            <h1>
+                Your Time.
+                <br>
+
+                <span>Your Pattern.</span>
+                <br>
+
+                <strong>Your Plan.</strong>
+            </h1>
+
+
+            <p class="hero-description">
+
+                TimeTrace is an AI-powered personalized planner that
+                understands how you work, learns your habits, and
+                intelligently organizes your day around your priorities,
+                deadlines, energy levels, and available time.
+
+            </p>
+
+
+            <div class="hero-buttons">
+
+                <a href="{{ url_for('signup') }}"
+                   class="primary-btn">
+
+                    Get Started
+
+                    <span>→</span>
+
+                </a>
+
+
+                <a href="{{ url_for('login') }}"
+                   class="secondary-btn">
+
+                    I Already Have an Account
+
+                </a>
+
+            </div>
+
+
+            <div class="hero-stats">
+
+                <div>
+                    <strong>AI</strong>
+                    <span>Personalized Planning</span>
+                </div>
+
+                <div>
+                    <strong>24/7</strong>
+                    <span>Smart Assistance</span>
+                </div>
+
+                <div>
+                    <strong>∞</strong>
+                    <span>Adaptive Scheduling</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- AI PLANNER VISUAL -->
+        <div class="hero-visual">
+
+            <div class="floating-card card-top">
+
+                <div class="mini-icon">🧠</div>
+
+                <div>
+                    <span>AI Insight</span>
+                    <strong>Peak focus detected</strong>
+                </div>
+
+            </div>
+
+
+            <div class="planner-window">
+
+                <div class="window-header">
+
+                    <div class="window-title">
+
+                        <div class="mini-logo">
+                            ⏱
+                        </div>
+
+                        <div>
+                            <strong>TimeTrace AI</strong>
+                            <small>Today's Plan</small>
+                        </div>
+
+                    </div>
+
+                    <div class="status">
+                        <span></span>
+                        AI Active
+                    </div>
+
+                </div>
+
+
+
+                <div class="date-row">
+
+                    <div>
+                        <small>SUNDAY</small>
+                        <strong>16 AUG</strong>
+                    </div>
+
+                    <div class="progress-info">
+                        <span>Daily Progress</span>
+                        <strong>72%</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+
+
+
+                <!-- TASK 1 -->
+                <div class="task completed">
+
+                    <div class="task-time">
+                        09:00
+                        <small>AM</small>
+                    </div>
+
+                    <div class="task-line">
+                        <span></span>
+                    </div>
+
+                    <div class="task-info">
+
+                        <div class="task-title">
+                            <span class="check">✓</span>
+                            Morning Study
+                        </div>
+
+                        <small>
+                            Machine Learning • 60 min
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- TASK 2 -->
+                <div class="task active">
+
+                    <div class="task-time">
+                        11:00
+                        <small>AM</small>
+                    </div>
+
+                    <div class="task-line">
+                        <span></span>
+                    </div>
+
+                    <div class="task-info">
+
+                        <div class="task-title">
+                            <span class="play">▶</span>
+                            Project Work
+                        </div>
+
+                        <small>
+                            Smart Planner Development • 90 min
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- TASK 3 -->
+                <div class="task">
+
+                    <div class="task-time">
+                        02:30
+                        <small>PM</small>
+                    </div>
+
+                    <div class="task-line">
+                        <span></span>
+                    </div>
+
+                    <div class="task-info">
+
+                        <div class="task-title">
+                            <span class="dot"></span>
+                            GATE Preparation
+                        </div>
+
+                        <small>
+                            Algorithms • 60 min
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- TASK 4 -->
+                <div class="task">
+
+                    <div class="task-time">
+                        06:00
+                        <small>PM</small>
+                    </div>
+
+                    <div class="task-line">
+                        <span></span>
+                    </div>
+
+                    <div class="task-info">
+
+                        <div class="task-title">
+                            <span class="dot"></span>
+                            Workout & Break
+                        </div>
+
+                        <small>
+                            Personal • 45 min
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="ai-message">
+
+                    <div class="ai-avatar">
+                        ✨
+                    </div>
+
+                    <div>
+
+                        <strong>TimeTrace AI</strong>
+
+                        <p>
+                            Your next focus period starts in
+                            15 minutes.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- FLOATING VOICE CARD -->
+            <div class="floating-card voice-card">
+
+                <div class="voice-icon">
+                    🎙
+                </div>
+
+                <div>
+
+                    <span>Voice Assistant</span>
+
+                    <strong>
+                        "Plan my evening"
+                    </strong>
+
+                </div>
+
+                <div class="voice-waves">
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                </div>
+
+            </div>
+
+
+            <!-- RESCHEDULE CARD -->
+            <div class="floating-card reschedule-card">
+
+                <div class="refresh-icon">
+                    ↻
+                </div>
+
+                <div>
+
+                    <span>Smart Rescheduling</span>
+
+                    <strong>
+                        Schedule optimized
+                    </strong>
+
+                </div>
+
+                <span class="success">
+                    ✓
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- FEATURES -->
+    <section class="features-section" id="features">
+
+        <div class="section-heading">
+
+            <div class="badge">
+                INTELLIGENT PRODUCTIVITY
+            </div>
+
+            <h2>
+                More Than a Planner.
+                <span>An AI That Understands You.</span>
+            </h2>
+
+            <p>
+                TimeTrace continuously adapts your schedule according
+                to your behavior, priorities and changing day.
+            </p>
+
+        </div>
+
+
+
+        <div class="features-grid">
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🧠
+                </div>
+
+                <h3>
+                    Personalized AI Planning
+                </h3>
+
+                <p>
+                    Creates schedules based on your deadlines,
+                    priorities, available time and personal habits.
+                </p>
+
+            </div>
+
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🎙️
+                </div>
+
+                <h3>
+                    AI Voice Interaction
+                </h3>
+
+                <p>
+                    Talk naturally to your planner. Add tasks,
+                    ask about your schedule or reorganize your day
+                    using your voice.
+                </p>
+
+            </div>
+
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🔄
+                </div>
+
+                <h3>
+                    Automatic Rescheduling
+                </h3>
+
+                <p>
+                    Missed a task? TimeTrace finds suitable free
+                    time and automatically reorganizes your schedule.
+                </p>
+
+            </div>
+
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    📊
+                </div>
+
+                <h3>
+                    Procrastination Detection
+                </h3>
+
+                <p>
+                    Identifies repeated delays and skipped tasks
+                    and provides intelligent recommendations.
+                </p>
+
+            </div>
+
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    ⚡
+                </div>
+
+                <h3>
+                    Energy-Aware Scheduling
+                </h3>
+
+                <p>
+                    Learns when you are most productive and places
+                    demanding tasks during your strongest focus periods.
+                </p>
+
+            </div>
+
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    ⚖️
+                </div>
+
+                <h3>
+                    Work-Life Balance
+                </h3>
+
+                <p>
+                    Balances study, work, breaks and personal time
+                    to create a sustainable daily routine.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- HOW IT WORKS -->
+    <section class="how-section" id="how-it-works">
+
+        <div class="section-heading">
+
+            <div class="badge">
+                HOW TIMETRACE WORKS
+            </div>
+
+            <h2>
+                Your Day Gets Smarter
+            </h2>
+
+            <p>
+                TimeTrace continuously learns and adapts instead
+                of forcing you into a fixed schedule.
+            </p>
+
+        </div>
+
+
+
+        <div class="steps">
+
+            <div class="step">
+
+                <div class="step-number">
+                    01
+                </div>
+
+                <h3>
+                    Tell TimeTrace
+                </h3>
+
+                <p>
+                    Add your tasks, deadlines, priorities and
+                    available time — by typing or speaking.
+                </p>
+
+            </div>
+
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    02
+                </div>
+
+                <h3>
+                    AI Understands You
+                </h3>
+
+                <p>
+                    The system learns your habits, productivity
+                    patterns, energy levels and task completion behavior.
+                </p>
+
+            </div>
+
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    03
+                </div>
+
+                <h3>
+                    Schedule Automatically
+                </h3>
+
+                <p>
+                    TimeTrace creates an optimized personalized
+                    schedule around your real availability.
+                </p>
+
+            </div>
+
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    04
+                </div>
+
+                <h3>
+                    Adapt When Things Change
+                </h3>
+
+                <p>
+                    Missed something? The AI finds your next suitable
+                    free slot and intelligently reschedules it.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- CTA -->
+    <section class="cta-section">
+
+        <div class="cta-content">
+
+            <div class="cta-icon">
+                ✨
+            </div>
+
+            <h2>
+                Stop Managing Your Time.
+                <br>
+                <span>Let AI Manage It With You.</span>
+            </h2>
+
+            <p>
+                Build a schedule that works around your life,
+                not a life that works around your schedule.
+            </p>
+
+            <a href="{{ url_for('signup') }}"
+               class="primary-btn">
+
+                Start Your TimeTrace Journey
+
+                <span>→</span>
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- FOOTER -->
+    <footer>
+
+        <div class="footer-logo">
+
+            <div class="logo-icon">
+                ⏱
+            </div>
+
+            <div>
+                <strong>TimeTrace AI</strong>
+                <small>SMART PERSONALIZED PLANNER</small>
+            </div>
+
+        </div>
+
+
+        <p>
+            AI-powered time management for smarter,
+            more productive days.
+        </p>
+
+
+        <div class="footer-right">
+            © 2026 TimeTrace AI
+        </div>
+
+    </footer>
+
+
+
+</body>
+</html>

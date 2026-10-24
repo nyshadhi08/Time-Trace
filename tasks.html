@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Tasks - TimeTrace</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        /* =========================================
+           TASK ACTION BUTTONS
+        ========================================= */
+
+        .task-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-button {
+            border: none;
+            padding: 9px 13px;
+            border-radius: 9px;
+
+            font-size: 13px;
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition: all 0.2s ease;
+
+            white-space: nowrap;
+        }
+
+        .complete-btn {
+            background: #e8f7ef;
+            color: #16834b;
+        }
+
+        .complete-btn:hover {
+            background: #d5f0e1;
+            transform: translateY(-1px);
+        }
+
+        .reschedule-btn {
+            background: #eeeaff;
+            color: #5865f2;
+        }
+
+        .reschedule-btn:hover {
+            background: #ddd8ff;
+            transform: translateY(-1px);
+        }
+
+        .action-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .done-text {
+            color: #16834b;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+
+        /* =========================================
+           NOTIFICATION MESSAGE
+        ========================================= */
+
+        .task-message {
+            position: fixed;
+
+            top: 25px;
+            right: 25px;
+
+            z-index: 9999;
+
+            padding: 14px 20px;
+
+            border-radius: 12px;
+
+            background: #ffffff;
+            color: #252d57;
+
+            box-shadow:
+                0 10px 35px rgba(37,45,87,0.18);
+
+            font-size: 14px;
+            font-weight: 600;
+
+            display: none;
+
+            max-width: 380px;
+        }
+
+        .task-message.show {
+            display: block;
+        }
+
+        .task-message.success {
+            border-left: 4px solid #16834b;
+        }
+
+        .task-message.error {
+            border-left: 4px solid #d93636;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+    <!-- =========================================
+         SIDEBAR
+    ========================================== -->
+
+    <aside class="sidebar">
+
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                ⏱
+            </div>
+
+            <span>
+                TimeTrace
+            </span>
+
+        </div>
+
+
+        <div class="workspace-title">
+            WORKSPACE
+        </div>
+
+
+        <nav class="navigation">
+
+
+            <a href="{{ url_for('dashboard') }}"
+               class="nav-item">
+
+                <span>🏠</span>
+                <span>Today</span>
+
+            </a>
+
+
+            <a href="{{ url_for('goals_page') }}"
+               class="nav-item">
+
+                <span>🎯</span>
+                <span>Goals</span>
+
+            </a>
+
+
+            <a href="{{ url_for('planner') }}"
+               class="nav-item">
+
+                <span>📅</span>
+                <span>Planner</span>
+
+            </a>
+
+
+            <a href="{{ url_for('tasks_page') }}"
+               class="nav-item active">
+
+                <span>✓</span>
+                <span>Tasks</span>
+
+            </a>
+
+        </nav>
+
+
+        <div class="workspace-title insights-title">
+            INSIGHTS
+        </div>
+
+
+        <nav class="navigation">
+
+
+            <a href="{{ url_for('productivity_dna') }}"
+               class="nav-item">
+
+                <span>🧬</span>
+                <span>My Productivity DNA</span>
+
+            </a>
+
+
+            <a href="{{ url_for('analytics') }}"
+               class="nav-item">
+
+                <span>📊</span>
+                <span>Analytics</span>
+
+            </a>
+
+
+        </nav>
+
+    </aside>
+
+
+
+    <!-- =========================================
+         MAIN
+    ========================================== -->
+
+    <main class="main">
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+
+            <div>
+
+                <div class="eyebrow">
+                     DAILY TASKS
+                </div>
+
+
+                <h1>
+                    My Tasks
+                </h1>
+
+
+                <p>
+                    Manage your tasks and let TimeTrace
+                    automatically adjust your schedule.
+                </p>
+
+            </div>
+
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="back-button">
+
+                ← Dashboard
+
+            </a>
+
+
+        </div>
+
+
+
+        <!-- =========================================
+             TASK TABLE
+        ========================================== -->
+
+        <div class="table-card">
+
+
+            <table class="data-table">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Task
+                        </th>
+
+                        <th>
+                            Category
+                        </th>
+
+                        <th>
+                            Duration
+                        </th>
+
+                        <th>
+                            Priority
+                        </th>
+
+                        <th>
+                            Scheduled
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                {% if tasks %}
+
+
+                    {% for task in tasks %}
+
+
+                    <tr>
+
+
+                        <!-- TASK -->
+
+                        <td>
+
+                            <strong>
+                                {{ task['title'] }}
+                            </strong>
+
+                        </td>
+
+
+
+                        <!-- CATEGORY -->
+
+                        <td>
+
+                            {{ task['category'] }}
+
+                        </td>
+
+
+
+                        <!-- DURATION -->
+
+                        <td>
+
+                            {% if task['duration'] %}
+                            {{ task['duration'] }}
+                            min
+                            {% else %}
+                            —
+                            {% endif %}
+
+                        </td>
+
+
+
+                        <!-- PRIORITY -->
+
+                        <td>
+
+                            <span
+                                class="priority
+                                {% if task['priority'] == 'High' %}
+                                    high
+                                {% elif task['priority'] == 'Low' %}
+                                    low
+                                {% else %}
+                                    medium
+                                {% endif %}">
+
+                                {{ task['priority'] }}
+
+                            </span>
+
+                        </td>
+
+
+
+                        <!-- SCHEDULED TIME -->
+
+                        <td>
+
+
+                            {% if task['scheduled_start'] %}
+
+
+                                {{ task['scheduled_start'][11:16] }}
+
+                                {% if task['scheduled_end'] %}
+                                -
+
+                                {{ task['scheduled_end'][11:16] }}
+                                {% endif %}
+
+
+                            {% else %}
+
+
+                                Flexible
+
+
+                            {% endif %}
+
+
+                        </td>
+
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+
+                            <span
+                                class="status
+                                {% if task['status'] == 'completed' %}
+                                    completed
+                                {% elif task['status'] == 'missed' %}
+                                    missed
+                                {% else %}
+                                    pending
+                                {% endif %}">
+
+                                {{ task['status'] }}
+
+                            </span>
+
+
+                        </td>
+
+
+
+                        <!-- =================================
+                             ACTIONS
+                        ================================== -->
+
+                        <td>
+
+                            {% if task['status'] != 'completed' %}
+
+
+                                <div class="task-actions">
+
+
+                                    <!-- COMPLETE -->
+
+                                    <button
+                                        type="button"
+                                        class="action-button complete-btn"
+                                        onclick="completeTask(
+                                            {{ task['id'] }},
+                                            this
+                                        )">
+
+                                        ✓ Complete
+
+                                    </button>
+
+
+
+                                    <!-- RESCHEDULE -->
+
+                                    <button
+                                        type="button"
+                                        class="action-button reschedule-btn"
+                                        onclick="rescheduleTask(
+                                            {{ task['id'] }},
+                                            this
+                                        )">
+
+                                        ↻ Reschedule
+
+                                    </button>
+
+
+                                </div>
+
+
+                            {% else %}
+
+
+                                <span class="done-text">
+
+                                    ✓ Done
+
+                                </span>
+
+
+                            {% endif %}
+
+                        </td>
+
+
+                    </tr>
+
+
+                    {% endfor %}
+
+
+                {% else %}
+
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="empty-table">
+
+                            <div style="padding:30px;">
+
+                                <div style="font-size:35px;">
+                                    📅
+                                </div>
+
+                                <h3>
+                                    No tasks found
+                                </h3>
+
+                                <p>
+                                    Add a task through TimeTrace AI
+                                    and it will appear here.
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+
+                {% endif %}
+
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+
+<!-- =========================================
+     NOTIFICATION MESSAGE
+========================================== -->
+
+<div
+    id="taskMessage"
+    class="task-message">
+
+</div>
+
+
+
+<script>
+
+
+/* =========================================
+   SHOW MESSAGE
+========================================= */
+
+function showTaskMessage(message, type = "success") {
+
+    const box =
+        document.getElementById("taskMessage");
+
+    if (!box) return;
+
+
+    box.textContent = message;
+
+
+    box.className =
+        "task-message show " + type;
+
+
+    setTimeout(function() {
+
+        box.classList.remove("show");
+
+    }, 3500);
+
+}
+
+
+
+/* =========================================
+   VOICE OUTPUT - tasks.html had none before.
+   This mirrors the same speechSynthesis approach used on the
+   dashboard, so every action on this page speaks its result too.
+========================================= */
+
+function speak(text) {
+    if (!text || !("speechSynthesis" in window)) {
+        return Promise.resolve();
+    }
+
+    return new Promise(function(resolve) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        let settled = false;
+
+        function finish() {
+            if (settled) return;
+            settled = true;
+            clearTimeout(fallback);
+            resolve();
+        }
+
+        utterance.rate = 1;
+        utterance.onend = finish;
+        utterance.onerror = finish;
+
+        // Do not leave the task view indefinitely if a browser speech engine
+        // fails to dispatch its completion event.
+        const fallback = setTimeout(finish, 30000);
+
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utterance);
+    });
+}
+
+
+/* =========================================
+   COMPLETE TASK
+========================================= */
+
+async function completeTask(id, button) {
+
+
+    if (!id) {
+
+        showTaskMessage(
+            "Invalid task.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (button) {
+
+        button.disabled = true;
+
+        button.textContent =
+            "Completing...";
+
+    }
+
+
+    try {
+
+
+        const response =
+            await fetch(
+                "/complete/" + id,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+
+                        "Accept":
+                            "application/json"
+                    }
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Unable to complete task."
+            );
+
+        }
+
+
+        if (data.success) {
+
+
+            showTaskMessage(
+                data.message ||
+                "Task completed successfully.",
+                "success"
+            );
+
+            await speak(data.speak || data.message || "Task completed.");
+            window.location.reload();
+
+
+        } else {
+
+
+            throw new Error(
+                data.message ||
+                "Could not complete task."
+            );
+
+        }
+
+
+    }
+
+    catch (error) {
+
+
+        console.error(
+            "COMPLETE TASK ERROR:",
+            error
+        );
+
+
+        showTaskMessage(
+            error.message ||
+            "Unable to complete task.",
+            "error"
+        );
+
+        speak(error.message || "Unable to complete the task.");
+
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+                "✓ Complete";
+
+        }
+
+    }
+
+}
+
+
+
+/* =========================================
+   RESCHEDULE TASK
+========================================= */
+
+async function rescheduleTask(id, button) {
+
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const date = window.prompt("New date (YYYY-MM-DD):", tomorrow.toISOString().slice(0, 10));
+    if (date === null) return;
+    const time = window.prompt("New time (24-hour HH:MM):", "09:00");
+    if (time === null) return;
+
+
+    if (!id) {
+
+        showTaskMessage(
+            "Invalid task.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (button) {
+
+        button.disabled = true;
+
+        button.textContent =
+            "↻ Rescheduling...";
+
+    }
+
+
+    try {
+
+
+        const response =
+            await fetch(
+                "/reschedule/" + id,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+
+                        "Accept":
+                            "application/json"
+                    },
+                    body: JSON.stringify({ date: date.trim(), time: time.trim() })
+                }
+            );
+
+
+        /*
+         * Try to read JSON safely.
+         */
+
+        let data;
+
+        try {
+
+            data =
+                await response.json();
+
+        }
+
+        catch (jsonError) {
+
+            throw new Error(
+                "Server returned an invalid response."
+            );
+
+        }
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Unable to reschedule task."
+            );
+
+        }
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message ||
+                "No suitable time was found."
+            );
+
+        }
+
+
+
+        /* =====================================
+           SUCCESS
+        ====================================== */
+
+        let message =
+            data.message ||
+            "Task rescheduled successfully.";
+
+
+        /*
+         * If Flask sends a new scheduled time,
+         * show it to the user.
+         */
+
+        if (
+            data.scheduled_start &&
+            data.scheduled_end
+        ) {
+
+            message +=
+                " New time: " +
+                formatScheduledTime(
+                    data.scheduled_start
+                ) +
+                " - " +
+                formatScheduledTime(
+                    data.scheduled_end
+                );
+
+        }
+
+
+        showTaskMessage(
+            message,
+            "success"
+        );
+
+        await speak(data.speak || message);
+        window.location.reload();
+
+
+    }
+
+    catch (error) {
+
+
+        console.error(
+            "RESCHEDULE TASK ERROR:",
+            error
+        );
+
+
+        showTaskMessage(
+            error.message ||
+            "Unable to reschedule task.",
+            "error"
+        );
+
+        speak(error.message || "Unable to reschedule the task.");
+
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+                "↻ Reschedule";
+
+        }
+
+    }
+
+}
+
+
+
+/* =========================================
+   FORMAT SCHEDULED TIME
+========================================= */
+
+function formatScheduledTime(value) {
+
+
+    if (!value) {
+
+        return "";
+
+    }
+
+
+    /*
+     * Handles:
+     * 2026-08-16 14:30:00
+     * 2026-08-16T14:30:00
+     * 14:30
+     */
+
+    const text =
+        String(value);
+
+
+    if (text.includes("T")) {
+
+        return text
+            .split("T")[1]
+            .substring(0, 5);
+
+    }
+
+
+    if (text.includes(" ")) {
+
+        return text
+            .split(" ")[1]
+            .substring(0, 5);
+
+    }
+
+
+    return text.substring(0, 5);
+
+}
+
+
+
+</script>
+
+
+</body>
+
+</html>

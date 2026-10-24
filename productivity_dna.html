@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Productivity DNA - TimeTrace</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+<aside class="sidebar">
+
+<div class="brand">
+
+<div class="brand-icon">
+⏱
+</div>
+
+<span>
+TimeTrace
+</span>
+
+</div>
+
+
+<div class="workspace-title">
+WORKSPACE
+</div>
+
+
+<nav class="navigation">
+
+<a href="{{ url_for('dashboard') }}"
+class="nav-item">
+
+<span>🏠</span>
+<span>Today</span>
+
+</a>
+
+
+<a href="{{ url_for('goals_page') }}"
+class="nav-item">
+
+<span>🎯</span>
+<span>Goals</span>
+
+</a>
+
+
+<a href="{{ url_for('planner') }}"
+class="nav-item">
+
+<span>📅</span>
+<span>Planner</span>
+
+</a>
+
+
+<a href="{{ url_for('tasks_page') }}"
+class="nav-item">
+
+<span>✓</span>
+<span>Tasks</span>
+
+</a>
+
+</nav>
+
+
+<div class="workspace-title insights-title">
+INSIGHTS
+</div>
+
+
+<nav class="navigation">
+
+<a href="{{ url_for('productivity_dna') }}"
+class="nav-item active">
+
+<span>🧬</span>
+
+<span>
+My Productivity DNA
+</span>
+
+</a>
+
+
+<a href="{{ url_for('analytics') }}"
+class="nav-item">
+
+<span>📊</span>
+
+<span>
+Analytics
+</span>
+
+</a>
+
+</nav>
+
+</aside>
+
+
+<main class="main">
+
+
+<div class="page-header">
+
+<div>
+
+<div class="eyebrow">
+TIMETRACE INSIGHT
+</div>
+
+<h1>
+🧬 My Productivity DNA
+</h1>
+
+<p>
+TimeTrace learns your working patterns over time.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="dna-hero">
+
+<div class="dna-icon">
+🧬
+</div>
+
+<div>
+
+<h2>
+Your productivity profile
+</h2>
+
+<p>
+This profile changes as you complete,
+miss and postpone tasks.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="dna-grid">
+
+
+<div class="dna-card">
+
+<span>
+Overall Productivity
+</span>
+
+<strong>
+{{ productivity|default(0) }}%
+</strong>
+
+<div class="progress-bar">
+
+<div
+class="progress-fill"
+style="width: {{ productivity|default(0) }}%;">
+
+</div>
+
+</div>
+
+</div>
+
+
+{% if dna is mapping %}
+
+{% for key, value in dna.items() %}
+
+<div class="dna-card">
+
+<span>
+{{ key|replace('_', ' ')|title }}
+</span>
+
+<strong>
+{{ value }}
+</strong>
+
+</div>
+
+{% endfor %}
+
+{% endif %}
+
+
+</div>
+
+
+<section class="content-card">
+
+<div class="section-heading">
+
+<div>
+
+<span class="eyebrow">
+HOW IT WORKS
+</span>
+
+<h2>
+Your DNA changes with your behavior
+</h2>
+
+</div>
+
+</div>
+
+
+<div class="dna-explanation">
+
+<div>
+
+<span>
+✓
+</span>
+
+<div>
+
+<h3>
+Complete tasks
+</h3>
+
+<p>
+Regularly completing tasks improves your
+productivity profile.
+</p>
+
+</div>
+
+</div>
+
+
+<div>
+
+<span>
+⏰
+</span>
+
+<div>
+
+<h3>
+Postpone tasks
+</h3>
+
+<p>
+    TimeTrace tracks postponement patterns to
+understand your planning behavior.
+</p>
+
+</div>
+
+</div>
+
+
+<div>
+
+<span>
+🔄
+</span>
+
+<div>
+
+<h3>
+Missed tasks
+</h3>
+
+<p>
+Missed tasks help TimeTrace identify where
+your schedule needs adjustment.
+</p>
+
+</div>
+
+</div>
+
+
+<div>
+
+<span>
+📅
+</span>
+
+<div>
+
+<h3>
+Preferred time
+</h3>
+
+<p>
+Over time, your activity can reveal when
+you work most effectively.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="content-card">
+
+<div class="section-heading">
+
+<div>
+
+<span class="eyebrow">
+PROGRESS
+</span>
+
+<h2>
+Productivity History
+</h2>
+
+</div>
+
+</div>
+
+
+{% if history %}
+
+<div class="history-list">
+
+{% for item in history %}
+
+<div class="history-row">
+
+{% if item is mapping %}
+
+<span>
+{{ item.get('date', 'Day') }}
+</span>
+
+<strong>
+
+{{ item.get(
+'productivity',
+item.get(
+'score',
+0
+)
+) }}%
+
+</strong>
+
+{% else %}
+
+<span>
+{{ item }}
+</span>
+
+{% endif %}
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% else %}
+
+<div class="empty-state">
+
+🧬
+
+<h3>
+Your DNA is still learning
+</h3>
+
+<p>
+Complete a few tasks and TimeTrace will
+start building your productivity profile.
+</p>
+
+</div>
+
+{% endif %}
+
+</section>
+
+
+</main>
+
+</div>
+
+</body>
+
+</html>
